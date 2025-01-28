@@ -1,114 +1,172 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import Carousel from "@/components/Carousel";
+import { motion } from "framer-motion";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const Home = () => {
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+  const stagger = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+  };
 
-export default function Home() {
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/pages/index.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div>
+      {/* Hero Section */}
+      <motion.section
+        className="hero min-h-screen bg-base-200 flex items-center justify-center"
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+      >
+        <div className="text-center">
+          <motion.h1
+            className="text-5xl font-bold text-primary"
+            variants={fadeIn}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Unlock Your Career Potential
+          </motion.h1>
+          <motion.p className="py-6" variants={fadeIn}>
+            Discover tools, blogs, and inspiring stories to guide your journey
+            to success.
+          </motion.p>
+          <motion.a
+            href="/career-tools"
+            className="btn btn-primary"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Read our docs
-          </a>
+            Get Started Now
+          </motion.a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </motion.section>
+
+      {/* Features Section */}
+      <motion.section
+        className="py-8 bg-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={stagger}
+      >
+        <div className="container mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Features Designed for You
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Career Tools",
+                description:
+                  "Use templates, trackers, and resources to boost your professional growth.",
+                link: "/career-tools",
+              },
+              {
+                title: "Blogs",
+                description:
+                  "Gain insights and tips from career experts to excel in your field.",
+                link: "/blogs",
+              },
+              {
+                title: "Community Stories",
+                description:
+                  "Learn from real stories of success and challenges overcome.",
+                link: "/community-stories",
+              },
+            ].map((feature, index) => (
+              <motion.div
+                className="card bg-white shadow-xl"
+                key={index}
+                variants={fadeIn}
+              >
+                <div className="card-body">
+                  <h3 className="card-title">{feature.title}</h3>
+                  <p>{feature.description}</p>
+                  <a href={feature.link} className="btn btn-primary">
+                    Learn More
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Testimonials Section */}
+      <motion.section
+        className="py-12 bg-primary text-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={stagger}
+      >
+        <div className="container mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            What People Are Saying
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                text: `"The tools and blogs have helped me land my dream job. Highly recommend!"`,
+                author: "- Jane Doe",
+              },
+              {
+                text: `"I love the community stories—they keep me motivated to keep pushing forward."`,
+                author: "- John Smith",
+              },
+              {
+                text: `"Career Tips is a one-stop destination for everything I need to succeed."`,
+                author: "- Alice Johnson",
+              },
+            ].map((testimonial, index) => (
+              <motion.div
+                className="testimonial bg-white text-black p-6 rounded-lg shadow-lg"
+                key={index}
+                variants={fadeIn}
+              >
+                <p>{testimonial.text}</p>
+                <p className="mt-4 font-bold">{testimonial.author}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Newsletter Signup Section */}
+      <motion.section
+        className="py-12 bg-gray-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+      >
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
+          <p className="mb-6">
+            Sign up for our newsletter to receive the latest tips and updates.
+          </p>
+          <form className="flex flex-col md:flex-row justify-center items-center gap-4">
+            <motion.input
+              type="email"
+              placeholder="Enter your email"
+              className="input input-bordered w-full max-w-xs"
+              whileFocus={{ scale: 1.05 }}
+            />
+            <motion.button
+              className="btn btn-primary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Subscribe
+            </motion.button>
+          </form>
+        </div>
+      </motion.section>
+      <Carousel />
     </div>
   );
-}
+};
+
+export default Home;
