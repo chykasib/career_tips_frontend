@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { getDoc, doc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { auth, db } from "../../firebaseConfig";
+import { auth } from "../../firebaseConfig";
 
 const Header = () => {
   const [user, setUser] = useState(null);
@@ -16,12 +15,23 @@ const Header = () => {
       if (currentUser) {
         setUser(currentUser);
 
-        // Fetch role from Firestore
-        const userDoc = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(userDoc);
+        // Fetch user role from the database using email
+        const response = await fetch("http://localhost:5000/api/users", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
 
-        if (docSnap.exists()) {
-          setRole(docSnap.data().role); // Set role from Firestore
+        if (!response.ok) {
+          throw new Error("Failed to fetch user role from the database.");
+        }
+
+        const users = await response.json();
+        const dbUser = users.find((user) => user.email === currentUser.email);
+
+        if (dbUser) {
+          setRole(dbUser.role); // Set the user's role
+        } else {
+          setRole(null);
         }
       } else {
         setUser(null);
@@ -76,8 +86,8 @@ const Header = () => {
               ) : (
                 <>
                   <li>
-                    <Link href="/dashboard" className="hover:text-gray-200">
-                      Dashboard
+                    <Link href="/user" className="hover:text-gray-200">
+                      User Dashboard
                     </Link>
                   </li>
                   <li>

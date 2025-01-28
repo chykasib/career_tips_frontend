@@ -35,7 +35,7 @@ const Login = () => {
         if (dbUser.role === "admin") {
           router.push("/admin");
         } else if (dbUser.role === "user") {
-          router.push("/dashboard");
+          router.push("/user");
         } else {
           setError("Invalid role found for the user.");
         }

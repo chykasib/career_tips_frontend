@@ -7,11 +7,6 @@ const AdminSidebar = () => {
       <nav className="mt-6">
         <ul className="space-y-4">
           <li>
-            <Link href="/admin">
-              <p className="block px-4 py-2 hover:bg-gray-700">Dashboard</p>
-            </Link>
-          </li>
-          <li>
             <Link href="/admin/tools">
               <p className="block px-4 py-2 hover:bg-gray-700">Manage Tools</p>
             </Link>
@@ -19,6 +14,11 @@ const AdminSidebar = () => {
           <li>
             <Link href="/admin/users">
               <p className="block px-4 py-2 hover:bg-gray-700">Manage Users</p>
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/blogs">
+              <p className="block px-4 py-2 hover:bg-gray-700">Blogs</p>
             </Link>
           </li>
         </ul>
