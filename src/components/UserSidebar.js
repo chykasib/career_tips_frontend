@@ -11,6 +11,11 @@ const UserSidebar = () => {
               <p className="block px-4 py-2 hover:bg-gray-700">Blogs</p>
             </Link>
           </li>
+          <li>
+            <Link href="/user/resume-builder">
+              <p className="block px-4 py-2 hover:bg-gray-700">ResumeBuilder</p>
+            </Link>
+          </li>
         </ul>
       </nav>
     </div>
