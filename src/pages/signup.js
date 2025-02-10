@@ -25,6 +25,7 @@ const Signup = () => {
       );
       const user = userCredential.user;
 
+      // Pass the Firebase UID to the backend
       await fetch("/api/addUser", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -32,12 +33,13 @@ const Signup = () => {
           name,
           email: user.email,
           role: "user", // Default role
+          uid: user.uid, // Pass the UID here
         }),
       });
 
-      router.push("/");
+      router.push("/"); // Redirect after successful signup
     } catch (err) {
-      displayFirebaseError(err);
+      displayFirebaseError(err); // Handle error if signup fails
     }
   };
 
@@ -47,19 +49,21 @@ const Signup = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
+      // Pass the Firebase UID to the backend
       await fetch("/api/addUser", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: user.displayName || "User",
+          name: user.displayName || "User", // Use displayName if available
           email: user.email,
-          role: "user",
+          role: "user", // Default role
+          uid: user.uid, // Pass the UID here
         }),
       });
 
-      router.push("/");
+      router.push("/"); // Redirect after successful signup
     } catch (error) {
-      displayFirebaseError(error);
+      displayFirebaseError(error); // Handle error if Google signup fails
     }
   };
 

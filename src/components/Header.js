@@ -6,33 +6,35 @@ import { auth } from "../../firebaseConfig";
 
 const Header = () => {
   const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null); // Store role here
+  const [role, setRole] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
 
-  // Check user authentication status and fetch role
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [router.pathname]);
+
+  // Check user authentication and fetch role
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
 
-        // Fetch user role from the database using email
+        // Fetch user role from the database
         const response = await fetch("http://localhost:5000/api/users", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch user role from the database.");
+          console.error("Failed to fetch user role");
+          return;
         }
 
         const users = await response.json();
         const dbUser = users.find((user) => user.email === currentUser.email);
-
-        if (dbUser) {
-          setRole(dbUser.role); // Set the user's role
-        } else {
-          setRole(null);
-        }
+        setRole(dbUser ? dbUser.role : null);
       } else {
         setUser(null);
         setRole(null);
@@ -45,20 +47,31 @@ const Header = () => {
   // Handle logout
   const handleLogout = async () => {
     try {
-      await signOut(auth); // Sign out
-      router.push("/"); // Redirect to homepage
+      await signOut(auth);
+      router.push("/");
     } catch (err) {
       console.error("Error signing out: ", err);
     }
   };
 
   return (
-    <header className="bg-blue-600 text-white p-4">
+    <header className="bg-gradient-to-r from-blue-500 to-teal-500 text-white p-4 shadow-md sticky top-0 z-20">
       <nav className="container mx-auto flex justify-between items-center">
-        <h1 className="text-xl font-bold">
+        {/* Logo */}
+        <h1 className="text-3xl font-bold">
           <Link href="/">Career Tips</Link>
         </h1>
-        <ul className="flex gap-6">
+
+        {/* Mobile Menu Button */}
+        <button
+          className="lg:hidden text-white focus:outline-none"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? "✖" : "☰"}
+        </button>
+
+        {/* Desktop Menu */}
+        <ul className="hidden lg:flex gap-6 text-lg">
           <li>
             <Link href="/" className="hover:text-gray-200">
               Home
@@ -66,7 +79,6 @@ const Header = () => {
           </li>
           {user ? (
             <>
-              {/* Conditional rendering based on role */}
               {role === "admin" ? (
                 <>
                   <li>
@@ -87,7 +99,7 @@ const Header = () => {
                 <>
                   <li>
                     <Link href="/user" className="hover:text-gray-200">
-                      User Dashboard
+                      Dashboard
                     </Link>
                   </li>
                   <li>
@@ -98,12 +110,12 @@ const Header = () => {
                 </>
               )}
               <li>
-                <button
+                <span
                   onClick={handleLogout}
-                  className="hover:text-gray-200 cursor-pointer"
+                  className="cursor-pointer hover:text-gray-200"
                 >
                   Logout
-                </button>
+                </span>
               </li>
             </>
           ) : (
@@ -127,6 +139,111 @@ const Header = () => {
           </li>
         </ul>
       </nav>
+
+      {/* Mobile Menu Dropdown */}
+      {menuOpen && (
+        <div className="lg:hidden bg-blue-500 text-white mt-4 p-4 rounded-md shadow-lg absolute w-full left-0 top-16">
+          <ul className="space-y-4 text-center">
+            <li>
+              <Link
+                href="/"
+                onClick={() => setMenuOpen(false)}
+                className="block"
+              >
+                Home
+              </Link>
+            </li>
+            {user ? (
+              <>
+                {role === "admin" ? (
+                  <>
+                    <li>
+                      <Link
+                        href="/admin"
+                        onClick={() => setMenuOpen(false)}
+                        className="block"
+                      >
+                        Admin Panel
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/manage-content"
+                        onClick={() => setMenuOpen(false)}
+                        className="block"
+                      >
+                        Manage Content
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <Link
+                        href="/user"
+                        onClick={() => setMenuOpen(false)}
+                        className="block"
+                      >
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/career-tools"
+                        onClick={() => setMenuOpen(false)}
+                        className="block"
+                      >
+                        Career Tools
+                      </Link>
+                    </li>
+                  </>
+                )}
+                <li>
+                  <span
+                    onClick={() => {
+                      handleLogout();
+                      setMenuOpen(false);
+                    }}
+                    className="cursor-pointer block"
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link
+                    href="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="block"
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/signup"
+                    onClick={() => setMenuOpen(false)}
+                    className="block"
+                  >
+                    Sign Up
+                  </Link>
+                </li>
+              </>
+            )}
+            <li>
+              <Link
+                href="/blogs"
+                onClick={() => setMenuOpen(false)}
+                className="block"
+              >
+                Blogs
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
     </header>
   );
 };

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { saveAs } from "file-saver";
 import { motion } from "framer-motion";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import {
   PDFDownloadLink,
   Document,
@@ -9,9 +8,9 @@ import {
   Text,
   View,
   StyleSheet,
-} from "@react-pdf/renderer"; // Import necessary parts from @react-pdf/renderer
+} from "@react-pdf/renderer";
+import UserLayout from "@/layouts/UserLayout";
 
-// Template formats
 const templates = [
   {
     name: "Modern",
@@ -98,7 +97,6 @@ const ResumeBuilder = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Create the PDF component
   const ResumePDF = () => {
     const styles = StyleSheet.create({
       page: {
@@ -161,207 +159,212 @@ const ResumeBuilder = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <Toaster position="top-right" />
-      <h1 className="text-4xl font-extrabold text-center mb-8 text-indigo-600">
-        Resume Builder
-      </h1>
+    <UserLayout>
+      <div className="container mx-auto p-6">
+        <Toaster position="top-right" />
+        <h1 className="text-4xl font-extrabold text-center mb-8 text-indigo-600">
+          Resume Builder
+        </h1>
 
-      {!selectedTemplate ? (
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {templates.map((template, index) => (
-            <motion.div
-              key={index}
-              className="p-4 border border-gray-300 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 cursor-pointer text-center"
-              whileHover={{ scale: 1.05 }}
-              onClick={() => setSelectedTemplate(template)}
-            >
-              <h3 className="text-xl font-bold text-gray-800">
-                {template.name}
-              </h3>
-              <p className="mt-2 text-gray-600">Click to choose</p>
-            </motion.div>
-          ))}
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex justify-between items-center mb-4">
-            <button
-              className="btn bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
-              onClick={handleBack}
-            >
-              Back
-            </button>
-            <h2 className="text-3xl font-bold text-gray-900">
-              Editing: {selectedTemplate.name}
-            </h2>
-          </div>
-
-          <div className="space-y-4 mb-6">
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              className="input input-bordered w-full py-2 px-4 rounded-md border border-gray-300"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="contact"
-              placeholder="Contact Information"
-              className="input input-bordered w-full py-2 px-4 rounded-md border border-gray-300"
-              onChange={handleChange}
-            />
-            <textarea
-              name="summary"
-              placeholder="Professional Summary"
-              className="textarea textarea-bordered w-full py-2 px-4 rounded-md border border-gray-300"
-              onChange={handleChange}
-            ></textarea>
-            <textarea
-              name="experience"
-              placeholder="Work Experience"
-              className="textarea textarea-bordered w-full py-2 px-4 rounded-md border border-gray-300"
-              onChange={handleChange}
-            ></textarea>
-            <textarea
-              name="education"
-              placeholder="Education"
-              className="textarea textarea-bordered w-full py-2 px-4 rounded-md border border-gray-300"
-              onChange={handleChange}
-            ></textarea>
-            <textarea
-              name="skills"
-              placeholder="Skills"
-              className="textarea textarea-bordered w-full py-2 px-4 rounded-md border border-gray-300"
-              onChange={handleChange}
-            ></textarea>
-
-            {/* Social Media Links */}
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Social Media Links</h3>
-              <input
-                type="text"
-                name="linkedin"
-                placeholder="LinkedIn URL"
-                className="input input-bordered w-full py-2 px-4 rounded-md border border-gray-300"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                name="github"
-                placeholder="GitHub URL"
-                className="input input-bordered w-full py-2 px-4 rounded-md border border-gray-300 mt-2"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                name="twitter"
-                placeholder="Twitter URL"
-                className="input input-bordered w-full py-2 px-4 rounded-md border border-gray-300 mt-2"
-                onChange={handleChange}
-              />
+        {!selectedTemplate ? (
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {templates.map((template, index) => (
+              <motion.div
+                key={index}
+                className="p-4 border border-gray-300 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 cursor-pointer text-center bg-gray-100 hover:bg-gray-200"
+                whileHover={{ scale: 1.05 }}
+                onClick={() => setSelectedTemplate(template)}
+              >
+                <h3 className="text-xl font-bold text-gray-800">
+                  {template.name}
+                </h3>
+                <p className="mt-2 text-gray-600">Click to choose</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <button
+                className="btn bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors"
+                onClick={handleBack}
+              >
+                Back
+              </button>
+              <h2 className="text-3xl font-bold text-gray-900">
+                Editing: {selectedTemplate.name}
+              </h2>
             </div>
 
-            <button
-              className="btn bg-indigo-600 text-white w-full py-2 mt-4 rounded-md hover:bg-indigo-700"
-              onClick={handlePreview}
-            >
-              Preview Resume
-            </button>
-          </div>
+            <div className="space-y-4 mb-6">
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                className="input input-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                name="contact"
+                placeholder="Contact Information"
+                className="input input-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={handleChange}
+              />
+              <textarea
+                name="summary"
+                placeholder="Professional Summary"
+                className="textarea textarea-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={handleChange}
+              ></textarea>
+              <textarea
+                name="experience"
+                placeholder="Work Experience"
+                className="textarea textarea-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={handleChange}
+              ></textarea>
+              <textarea
+                name="education"
+                placeholder="Education"
+                className="textarea textarea-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={handleChange}
+              ></textarea>
+              <textarea
+                name="skills"
+                placeholder="Skills"
+                className="textarea textarea-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={handleChange}
+              ></textarea>
 
-          {/* Preview Section */}
-          {isPreviewed && (
-            <div className={`mt-6 ${selectedTemplate.style}`}>
-              <h3 className={`${selectedTemplate.header} text-center`}>
-                {formData.name}
-              </h3>
-              <div className={`${selectedTemplate.layout}`}>
-                <div className="p-4">
-                  <h4 className={`${selectedTemplate.sectionTitle}`}>
-                    Contact
-                  </h4>
-                  <p className={`${selectedTemplate.content}`}>
-                    {formData.contact}
-                  </p>
-                  <h4 className={`${selectedTemplate.sectionTitle}`}>
-                    Summary
-                  </h4>
-                  <p className={`${selectedTemplate.content}`}>
-                    {formData.summary}
-                  </p>
-                  <h4 className={`${selectedTemplate.sectionTitle}`}>
-                    Experience
-                  </h4>
-                  <p className={`${selectedTemplate.content}`}>
-                    {formData.experience}
-                  </p>
-                  <h4 className={`${selectedTemplate.sectionTitle}`}>
-                    Education
-                  </h4>
-                  <p className={`${selectedTemplate.content}`}>
-                    {formData.education}
-                  </p>
-                  <h4 className={`${selectedTemplate.sectionTitle}`}>Skills</h4>
-                  <p className={`${selectedTemplate.content}`}>
-                    {formData.skills}
-                  </p>
+              {/* Social Media Links */}
+              <div>
+                <h3 className="text-xl font-semibold mb-2">
+                  Social Media Links
+                </h3>
+                <input
+                  type="text"
+                  name="linkedin"
+                  placeholder="LinkedIn URL"
+                  className="input input-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  name="github"
+                  placeholder="GitHub URL"
+                  className="input input-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 mt-2"
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  name="twitter"
+                  placeholder="Twitter URL"
+                  className="input input-bordered w-full py-3 px-4 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 mt-2"
+                  onChange={handleChange}
+                />
+              </div>
 
-                  {/* Social Media Links */}
-                  <h4 className={`${selectedTemplate.sectionTitle}`}>
-                    Social Media
-                  </h4>
-                  {formData.linkedin && (
+              <button
+                className="btn bg-indigo-600 text-white w-full py-3 mt-4 rounded-md hover:bg-indigo-700 transition-colors"
+                onClick={handlePreview}
+              >
+                Preview Resume
+              </button>
+            </div>
+
+            {/* Preview Section */}
+            {isPreviewed && (
+              <div className={`mt-6 ${selectedTemplate.style}`}>
+                <h3 className={`${selectedTemplate.header} text-center`}>
+                  {formData.name}
+                </h3>
+                <div className={`${selectedTemplate.layout}`}>
+                  <div className="p-4">
+                    <h4 className={`${selectedTemplate.sectionTitle}`}>
+                      Contact
+                    </h4>
                     <p className={`${selectedTemplate.content}`}>
-                      LinkedIn: {formData.linkedin}
+                      {formData.contact}
                     </p>
-                  )}
-                  {formData.github && (
+                    <h4 className={`${selectedTemplate.sectionTitle}`}>
+                      Summary
+                    </h4>
                     <p className={`${selectedTemplate.content}`}>
-                      GitHub: {formData.github}
+                      {formData.summary}
                     </p>
-                  )}
-                  {formData.twitter && (
+                    <h4 className={`${selectedTemplate.sectionTitle}`}>
+                      Experience
+                    </h4>
                     <p className={`${selectedTemplate.content}`}>
-                      Twitter: {formData.twitter}
+                      {formData.experience}
                     </p>
-                  )}
+                    <h4 className={`${selectedTemplate.sectionTitle}`}>
+                      Education
+                    </h4>
+                    <p className={`${selectedTemplate.content}`}>
+                      {formData.education}
+                    </p>
+                    <h4 className={`${selectedTemplate.sectionTitle}`}>
+                      Skills
+                    </h4>
+                    <p className={`${selectedTemplate.content}`}>
+                      {formData.skills}
+                    </p>
+                    <h4 className={`${selectedTemplate.sectionTitle}`}>
+                      Social Media
+                    </h4>
+                    {formData.linkedin && (
+                      <p className={`${selectedTemplate.content}`}>
+                        LinkedIn: {formData.linkedin}
+                      </p>
+                    )}
+                    {formData.github && (
+                      <p className={`${selectedTemplate.content}`}>
+                        GitHub: {formData.github}
+                      </p>
+                    )}
+                    {formData.twitter && (
+                      <p className={`${selectedTemplate.content}`}>
+                        Twitter: {formData.twitter}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Download Button */}
+                <div className="mt-6 text-center">
+                  <PDFDownloadLink
+                    document={<ResumePDF />}
+                    fileName={`${formData.name}-Resume.pdf`}
+                  >
+                    {({ loading }) =>
+                      loading ? (
+                        <button className="btn btn-primary" disabled>
+                          Generating PDF...
+                        </button>
+                      ) : (
+                        <button className="btn btn-success">
+                          Download Resume
+                        </button>
+                      )
+                    }
+                  </PDFDownloadLink>
                 </div>
               </div>
-
-              <div className="mt-6 flex justify-center">
-                <PDFDownloadLink
-                  document={<ResumePDF />}
-                  fileName={`${formData.name}_resume.pdf`}
-                >
-                  {({ loading }) =>
-                    loading ? (
-                      <button className="btn bg-indigo-600 text-white py-2 px-4 rounded-md">
-                        Loading PDF...
-                      </button>
-                    ) : (
-                      <button className="btn bg-indigo-600 text-white py-2 px-4 rounded-md">
-                        Download Resume (PDF)
-                      </button>
-                    )
-                  }
-                </PDFDownloadLink>
-              </div>
-            </div>
-          )}
-        </motion.div>
-      )}
-    </div>
+            )}
+          </motion.div>
+        )}
+      </div>
+    </UserLayout>
   );
 };
 
